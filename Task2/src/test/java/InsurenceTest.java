@@ -1,24 +1,27 @@
 import org.junit.*;
 import static org.junit.Assert.*;
-import pages.MainPage;
-import pages.SelectPolicy;
-import pages.PressButton;
-import pages.SendAppPage;
+import my.company.pages.MainPage;
+import my.company.pages.SelectPolicy;
+import my.company.pages.PressButton;
+import my.company.pages.SendAppPage;
 
 
 public class InsurenceTest extends BaseTest {
-
+    MainPage mainPage = new MainPage(driver);
+    PressButton pressButton = new PressButton(driver);
+    SendAppPage sendAppPage = new SendAppPage(driver);
     @Test
     public void testInsurence() throws Exception {
         driver.get(baseUrl);
-        MainPage mainPage = new MainPage(driver);
+
         mainPage.selectMainMenu("Страхование");
         mainPage.selectSubMenu("Страхование путешественников");
-        PressButton pressButton = new PressButton(driver);
-        pressButton.pressButtonOfOn();
+       // pressButton.pressButtonOf("");
+        pressButton.pressButtonOf("Оформить онлайн");
         new SelectPolicy(driver).selectPolicy("Минимальная");
-        pressButton.pressButtonOf();
-        SendAppPage sendAppPage = new SendAppPage(driver);
+        pressButton.pressButtonOf("Оформить");
+
+
         sendAppPage.fillField("Surname", "Ivanov");
         sendAppPage.fillField("Name", "Ivan");
         sendAppPage.fillField("birthDate", "16.10.1996");
@@ -43,8 +46,9 @@ public class InsurenceTest extends BaseTest {
         assertEquals("111111",sendAppPage.getFillField("Номер Паспорта"));
         assertEquals("25.10.2016",sendAppPage.getFillField("Дата Выдачи"));
         assertEquals("поврдлрплв",sendAppPage.getFillField("Кем выдано"));
+        pressButton.pressButtonOf("Продолжить");
 
-        pressButton.pressButtonContin();
+        //pressButton.pressButtonContin();
 
         assertTrue(String.format("Получено значение [%s]. Ожидалось [%s]", sendAppPage.checkFieldErrorMessage("email"), "Поле не заполнено"),
                 sendAppPage.checkFieldErrorMessage("email").contains("Поле не заполнено"));
